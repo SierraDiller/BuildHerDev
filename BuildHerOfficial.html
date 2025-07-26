@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildHer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Montserrat:wght@900&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            overflow: hidden;
+        }
+
+        .site-title {
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 900;
+            color: #fff;
+            text-align: center;
+            font-size: 2.2rem;
+            margin-top: 1.5rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .slogan {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            color: #fff;
+            opacity: 0.85;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            letter-spacing: 0.04em;
+        }
+
+        .scroll-container {
+            position: relative;
+            width: 100vw;
+            height: 38vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin-top: 1.5rem;
+        }
+
+        .scroll-fade {
+            position: absolute;
+            top: 0;
+            width: 2vw;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .scroll-fade.left {
+            left: 0;
+            background: linear-gradient(to right, #000 95%, transparent 0%);
+        }
+
+        .scroll-fade.right {
+            right: 0;
+            background: linear-gradient(to left, #000 95%, transparent 0%);
+        }
+
+        .scrolling-text {
+            display: inline-block;
+            white-space: nowrap;
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-weight: 900;
+            /* Use clamp to keep font-size proportional across all screens */
+            font-size: clamp(8vw, 18vh, 100vw);
+            letter-spacing: 0.04em;
+            color: #fff;
+            text-transform: uppercase;
+            line-height: 1;
+            user-select: none;
+            will-change: transform;
+            text-shadow: 0 2px 24px rgba(0, 0, 0, 0.2);
+            /* Make the BUILDHER text much taller */
+            transform: scaleY(1.5);
+            transform-origin: center;
+        }
+
+        @media (max-width: 700px) {
+            .scrolling-text {
+                font-size: 18vw;
+                transform: scaleY(1.3);
+            }
+
+            .scroll-container {
+                height: 22vh;
+            }
+
+            .site-title {
+                font-size: 1.1rem;
+            }
+
+            .slogan {
+                font-size: 0.9rem;
+            }
+        }
+
+        .location-section {
+            position: relative;
+            padding: 3rem 2rem 2rem 2rem;
+            background: #222;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1.2s cubic-bezier(0.4,0,0.2,1), transform 1.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .location-section.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .location-title {
+            font-family: 'Montserrat', Arial, sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+            margin-bottom: 2rem;
+            z-index: 2;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s 0.2s cubic-bezier(0.4,0,0.2,1), transform 1s 0.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .location-section.loaded .location-title {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .location-bg-fade {
+            position: absolute;
+            top: 3.5rem;
+            /* just below the title */
+            left: 0;
+            width: 100%;
+            height: 300px;
+            /* adjust as needed */
+            z-index: 1;
+            pointer-events: none;
+            display: flex;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 1.2s 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .location-section.loaded .location-bg-fade {
+            opacity: 1;
+        }
+
+        .fade-in-bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1.5s ease;
+            filter: brightness(0.4) blur(1px);
+            /* darken and blur for readability */
+        }
+
+        .location-section.loaded .fade-in-bg {
+            opacity: 1;
+        }
+
+        .location-text {
+            position: relative;
+            z-index: 2;
+            color: #fff;
+            font-family: 'Roboto Mono', monospace;
+            margin-top: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s 0.6s cubic-bezier(0.4,0,0.2,1), transform 1s 0.6s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .location-section.loaded .location-text {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="site-title">BuildHer</div>
+    <div class="slogan">your vision, our code</div>
+    <div class="scroll-container">
+        <div class="scroll-fade left"></div>
+        <div class="scroll-fade right"></div>
+        <div class="scrolling-text" id="scrollingText">
+            BUILDHER&nbsp;BUILDHER&nbsp;BUILDHER&nbsp;BUILDHER&nbsp;BUILDHER
+            BUILDHER&nbsp;BUILDHER&nbsp;BUILDHER&nbsp;BUILDHER&nbsp;BUILDHER
+        </div>
+    </div>
+    <div class="location-section">
+        <h2 class="location-title">THE LOCATION</h2>
+        <div class="location-bg-fade">
+        </div>
+        <div class="location-text">
+            <p>The Singularity exists on the event horizon, where even a single grain of sand enters into a closed loop
+                of creation.</p>
+            <p>The perfect place to vibe in the vibrant discourse of all things past, present and future.</p>
+        </div>
+    </div>
+    <script>
+        // Horizontal scrolling animation for the big text
+        const scrollingText = document.getElementById('scrollingText');
+
+        // Dynamically calculate the width of a single BUILDHER block
+        function getSingleTextWidth() {
+            // Create a temporary span to measure one "BUILDHER   "
+            const tempSpan = document.createElement('span');
+            tempSpan.style.visibility = 'hidden';
+            tempSpan.style.position = 'absolute';
+            tempSpan.style.whiteSpace = 'nowrap';
+            tempSpan.style.fontFamily = getComputedStyle(scrollingText).fontFamily;
+            tempSpan.style.fontWeight = getComputedStyle(scrollingText).fontWeight;
+            tempSpan.style.fontSize = getComputedStyle(scrollingText).fontSize;
+            tempSpan.style.letterSpacing = getComputedStyle(scrollingText).letterSpacing;
+            tempSpan.innerHTML = 'BUILDHER&nbsp;&nbsp;&nbsp;';
+            document.body.appendChild(tempSpan);
+            const width = tempSpan.offsetWidth;
+            document.body.removeChild(tempSpan);
+            return width;
+        }
+
+        function getLoopWidth() {
+            return scrollingText.offsetWidth / 2;
+        }
+        let pos = 0;
+        let loopWidth = getLoopWidth();
+
+        // Recalculate on resize for responsiveness
+        window.addEventListener('resize', () => {
+            loopWidth = getLoopWidth();
+        });
+
+        function animate() {
+            pos += 0.7;
+            if (pos > loopWidth) pos = 0;
+            let scaleY = window.innerWidth <= 700 ? 1.3 : 1.5;
+            scrollingText.style.transform = `translateX(${-pos}px) scaleY(${scaleY})`;
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        window.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('.location-section').classList.add('loaded');
+        });
+    </script>
+</body>
+
+</html>
